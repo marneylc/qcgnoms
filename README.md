@@ -20,10 +20,21 @@ pip install .
 ```
 
 - Example:
-```
-$ python
->>> from qcgnoms import predict_msms
+```python
+
+from qcgnoms import predict_msms
 mz, itn = predict_msms("CC(C)/C=C/CCCCC(=O)NCC1=CC(=C(C=C1)O)OC", 45)
+def fmt(x,prec=None):
+    v=float(x)
+    return None if (prec is None and v!=v) else (round(v,prec) if prec is not None else v)
+
+tol = 1e-12
+mzmin = 40
+pairs = [[[float(m), float(i)]] for m, i in zip(mz, itn) if abs(float(i)) > tol and float(m) >= mzmin]
+
+import json
+open("spectra.json", "w", encoding="utf-8").write(json.dumps(pairs, separators=(",", ":")))
+
 ```
 
 ## Training:
